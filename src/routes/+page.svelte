@@ -20,6 +20,13 @@
         padding: 5px;
         width: 100%;
         height: 60px;
+
+		span {
+            font-weight: bold;
+            font-size: large;
+            padding: 10px;
+        }
+
 	}
 
 	.btn {
