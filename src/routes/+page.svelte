@@ -14,18 +14,12 @@
 		background-color: #4bce53;
 		color: white;
 		display: flex;
-		flex-direction: row;
-		align-items: center;
-		flex-grow: 1;
-		padding: 5px;
-		width: 100%;
-		height: 60px;
-		span {
-			font-weight: bold;
-			font-size: large;
-			padding: 10px;
-			text-shadow: 2px 2px 3px rgba(0, 0, 0, 0.4);
-		}
+        flex-direction: row;
+        align-items: center;
+        flex-grow: 1;
+        padding: 5px;
+        width: 100%;
+        height: 60px;
 	}
 
 	.btn {
