@@ -22,6 +22,11 @@
 			</div>
 		</div>
 	</div>
+	<div class="input-view">
+		<img class="btn add-photo" src="/icons/add_photo.png" alt="写真を追加" />
+		<input class="input-text" type="text">
+		<img class="btn submit" src="/icons/send.png" alt="送信">
+	</div>
 </div>
 
 <style>
@@ -49,6 +54,7 @@
 	.message-view {
 		flex-grow: 2;
 		background-color: #83cbcd;
+		height: 90vh;
 	}
 
 	/* メッセージとアイコンの配置の設定 */
