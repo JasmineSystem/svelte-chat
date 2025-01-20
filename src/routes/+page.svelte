@@ -1,7 +1,7 @@
 <script lang="ts">
 </script>
 
-<div>
+<div class="chat-container">
 	<div class="header">
 		<span>トークルーム１</span>
 		<img class="btn config" src="/icons/setting.png" alt="プロフィール設定ボタン" />
@@ -30,6 +30,14 @@
 </div>
 
 <style>
+	/* チャット全体のレイアウトと高さの設定 */
+	.chat-container {
+		display: flex;
+		flex-direction: column;
+		height: 100vh;
+	}
+
+	/* ヘッダーの設定 */
 	.header {
 		justify-content: space-between;
 		background-color: #4bce53;
@@ -84,7 +92,6 @@
 		color: whitesmoke;
 	}
 
-
 	/* メッセージを吹き出しにする設定 */
 	.message-text {
 		padding: 5px;
@@ -94,9 +101,19 @@
 		background-color: whitesmoke;
 	}
 
+	.input-view {
+		display: flex;
+		flex-direction: row;
+		justify-content: space-between;
+		background-color: #4bce53;
+		.input-text {
+			flex-grow: 2;
+		}
+	}
+
 	.btn {
 		width: 50px;
 		height: 50px;
 	}
-	/* ここまで追記 */
+
 </style>
