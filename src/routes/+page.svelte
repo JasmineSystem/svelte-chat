@@ -1,4 +1,27 @@
 <script lang="ts">
+	type message = {
+		id: string;
+		icon?: string;
+		text?: string;
+		name: string;
+		timestamp: string;
+	}
+	let messageList: message[] = []
+	let messageText: string = ""
+
+	function addMessage(message: string) {
+		messageList = [
+			...messageList,
+			{
+				id: messageList.length.toString(),
+				icon: "/icons/account_circle.png",
+				text: message,
+				name: "user1",
+				timestamp: Date.now().toString()
+			}
+		]
+		messageText = ""
+	}
 </script>
 
 <div class="chat-container">
@@ -7,25 +30,20 @@
 		<img class="btn config" src="/icons/setting.png" alt="プロフィール設定ボタン" />
 	</div>
 	<div class="message-view">
-		<div class="message-box you">
-			<img class="avatar" src="/icons/account_circle.png" alt="user1" />
-			<div class="message-area">
-				<span class="name"> user1 </span>
-				<span class="message-text"> 外が寒いのに、電車が熱いｗｗｗ </span>
+		{#each messageList as message }	
+			<div class="message-box you">
+				<img class="avatar" src={message.icon} alt="user1" />
+				<div class="message-area">
+					<span class="name"> {message.name} </span>
+					<span class="message-text"> {message.text} </span>
+				</div>
 			</div>
-		</div>
-		<div class="message-box me">
-			<img class="avatar" src="/icons/account_circle.png" alt="user1" />
-			<div class="message-area">
-				<span class="name"> user2 </span>
-				<span class="message-text"> 草 </span>
-			</div>
-		</div>
+		{/each}
 	</div>
 	<div class="input-view">
 		<img class="btn add-photo" src="/icons/add_photo.png" alt="写真を追加" />
-		<input class="input-text" type="text">
-		<img class="btn submit" src="/icons/send.png" alt="送信">
+		<input class="input-text" type="text" bind:value={messageText} placeholder="メッセージを入力" />
+		<img class="btn submit" on:click={() => addMessage(messageText)} src="/icons/send.png" alt="送信">
 	</div>
 </div>
 
@@ -39,13 +57,13 @@
 
 	/* ヘッダーの設定 */
 	.header {
-		justify-content: space-between;
-		background-color: #4bce53;
-		color: white;
 		display: flex;
+		justify-content: space-between;
         flex-direction: row;
         align-items: center;
         flex-grow: 1;
+		background-color: #4bce53;
+		color: white;
         padding: 5px;
         width: 100%;
         height: 60px;
