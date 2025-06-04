@@ -5,22 +5,45 @@
 		text?: string;
 		name: string;
 		timestamp: string;
-	}
-	let messageList: message[] = []
-	let messageText: string = ""
+	};
+	let messageList: message[] = [];
+	let messageText: string = '';
+	let isEdit: boolean = false;
+	let editTargetId: string = '';
 
 	function addMessage(message: string) {
 		messageList = [
 			...messageList,
 			{
 				id: messageList.length.toString(),
-				icon: "/icons/account_circle.png",
+				icon: '/icons/account_circle.png',
 				text: message,
-				name: "user1",
+				name: 'user1',
 				timestamp: Date.now().toString()
 			}
-		]
-		messageText = ""
+		];
+		messageText = '';
+	}
+
+	function updateMessage(message: string) {
+		let _message = messageList.filter((m) => m.id === editTargetId)[0];
+		_message.text = message;
+		messageList = [...messageList.filter((m) => m.id !== editTargetId), _message];
+		messageText = '';
+		isEdit = false;
+		editTargetId = '';
+	}
+
+	function switchEditMode(message: message) {
+		isEdit = !isEdit;
+		messageText = message.text || '';
+		editTargetId = message.id;
+	}
+
+	function cancelEdit() {
+		isEdit = false;
+		messageText = '';
+		editTargetId = '';
 	}
 </script>
 
@@ -30,20 +53,56 @@
 		<img class="btn config" src="/icons/setting.png" alt="プロフィール設定ボタン" />
 	</div>
 	<div class="message-view">
-		{#each messageList as message }	
+		{#each messageList as message}
 			<div class="message-box you">
 				<img class="avatar" src={message.icon} alt="user1" />
 				<div class="message-area">
 					<span class="name"> {message.name} </span>
-					<span class="message-text"> {message.text} </span>
+					<!-- 今回の追加箇所　始め: メッセージをタップしたら、編集モードに移行する -->
+					<span
+						on:click={() => {
+							switchEditMode(message);
+						}}
+						class="message-text"
+					>
+						{message.text}
+					</span>
+					<!-- 今回の追加箇所　終わり -->
+					<span class="timestamp">
+						{new Date(parseInt(message.timestamp)).toLocaleTimeString()}
+					</span>
 				</div>
 			</div>
 		{/each}
 	</div>
+	<!-- 今回の追加箇所 始め: 編集モードであることを示す表示を追加 -->
+	{#if isEdit}
+		<div class="tooltip">
+			<button>
+				<img
+					width="20"
+					height="20"
+					src="/icons/close-circle-outline.png"
+					alt="キャンセル"
+					on:click={() => {
+						cancelEdit();
+					}}
+				/>
+			</button>
+			<span>メッセージを編集中</span>
+		</div>
+	{/if}
+	<!-- 今回の追加箇所 終わり -->
 	<div class="input-view">
 		<img class="btn add-photo" src="/icons/add_photo.png" alt="写真を追加" />
 		<input class="input-text" type="text" bind:value={messageText} placeholder="メッセージを入力" />
-		<img class="btn submit" on:click={() => addMessage(messageText)} src="/icons/send.png" alt="送信">
+		<!-- 今回の追加箇所：imgのon:clickイベントで呼び出す関数を分岐を追加した -->
+		<img
+			class="btn submit"
+			on:click={() => (isEdit ? updateMessage(messageText) : addMessage(messageText))}
+			src="/icons/send.png"
+			alt="送信"
+		/>
 	</div>
 </div>
 
@@ -59,21 +118,20 @@
 	.header {
 		display: flex;
 		justify-content: space-between;
-        flex-direction: row;
-        align-items: center;
-        flex-grow: 1;
+		flex-direction: row;
+		align-items: center;
+		flex-grow: 1;
 		background-color: #4bce53;
 		color: white;
-        padding: 5px;
-        width: 100%;
-        height: 60px;
+		padding: 5px;
+		width: 100%;
+		height: 60px;
 
 		span {
-            font-weight: bold;
-            font-size: large;
-            padding: 10px;
-        }
-
+			font-weight: bold;
+			font-size: large;
+			padding: 10px;
+		}
 	}
 
 	/* メッセージ領域のサイズと背景色の設定 */
@@ -92,7 +150,6 @@
 			width: 50px;
 			height: 50px;
 		}
-
 	}
 	.me {
 		flex-direction: row-reverse;
@@ -101,8 +158,8 @@
 	/* ユーザー名とメッセージを縦並びにする設定 */
 	.message-area {
 		margin-left: 5px; /* アイコンとメッセージの間を少しあける */
-        display: flex;
-        flex-direction: column;
+		display: flex;
+		flex-direction: column;
 	}
 
 	/* 名前の文字色を変更する設定 */
@@ -113,10 +170,14 @@
 	/* メッセージを吹き出しにする設定 */
 	.message-text {
 		padding: 5px;
-        text-align: center;
+		text-align: center;
 		border: solid 1px lightgray;
 		border-radius: 15px;
 		background-color: whitesmoke;
+	}
+	.message-text:hover,
+	.message-text:active {
+		background-color: #d0f0c0; /* メッセージエリアにマウスオーバーしたときの背景色 */
 	}
 
 	.input-view {
@@ -134,4 +195,10 @@
 		height: 50px;
 	}
 
+	/* 今回の追加箇所：編集状態の表示のスタイル */
+	.tooltip {
+		display: flex;
+		gap: 5px;
+		background-color: lightgray;
+	}
 </style>
